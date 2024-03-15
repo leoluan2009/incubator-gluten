@@ -168,7 +168,7 @@ function compile {
       if [ $OS == 'Linux' ]; then
         sudo cmake --install xsimd-build/
       elif [ $OS == 'Darwin' ]; then
-        cmake --install xsimd-build/
+        sudo cmake --install xsimd-build/
       fi
     fi
     if [ -d gtest-build ]; then
@@ -176,7 +176,7 @@ function compile {
       if [ $OS == 'Linux' ]; then
         sudo cmake --install gtest-build/
       elif [ $OS == 'Darwin' ]; then
-        cmake --install gtest-build/
+        sudo cmake --install gtest-build/
       fi
     fi
   fi
@@ -265,6 +265,7 @@ function setup_linux {
   elif [[ "$LINUX_DISTRIBUTION" == "tencentos" ]]; then
     case "$LINUX_VERSION_ID" in
     3.2) scripts/setup-centos8.sh ;;
+    3.1) scripts/setup-centos8.sh ;;
     2.4)
       scripts/setup-centos7.sh
       set +u

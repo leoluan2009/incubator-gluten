@@ -215,6 +215,17 @@ install_tencentos_3.2() {
     install_maven_from_source
 }
 
+install_tencentos_3.1() {
+    yum -y install \
+        wget curl tar zip unzip git which \
+        cmake ninja-build perl-IPC-Cmd autoconf autoconf-archive automake libtool \
+        gcc-toolset-9-gcc gcc-toolset-9-gcc-c++ \
+        flex bison python3 \
+        java-8-konajdk
+
+    install_maven_from_source
+}
+
 install_debian_11() {
     apt-get -y install \
         wget curl tar zip unzip git apt-transport-https \
