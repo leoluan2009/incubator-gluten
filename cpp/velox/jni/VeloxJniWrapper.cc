@@ -84,11 +84,12 @@ void JNI_OnUnload(JavaVM* vm, void*) {
 JNIEXPORT void JNICALL Java_org_apache_gluten_init_NativeBackendInitializer_initialize( // NOLINT
     JNIEnv* env,
     jclass,
-    jbyteArray conf) {
+    jbyteArray conf,
+    jboolean isDriver) {
   JNI_METHOD_START
   auto safeArray = getByteArrayElementsSafe(env, conf);
   auto sparkConf = parseConfMap(env, safeArray.elems(), safeArray.length());
-  VeloxBackend::create(sparkConf);
+  VeloxBackend::create(sparkConf, isDriver);
   JNI_METHOD_END()
 }
 

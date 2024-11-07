@@ -89,7 +89,7 @@ class VeloxListenerApi extends ListenerApi with Logging {
 
     SparkDirectoryUtil.init(conf)
     UDFResolver.resolveUdfConf(conf, isDriver = true)
-    initialize(conf)
+    initialize(conf, true)
     UdfJniWrapper.registerFunctionSignatures()
   }
 
@@ -116,12 +116,12 @@ class VeloxListenerApi extends ListenerApi with Logging {
 
     SparkDirectoryUtil.init(conf)
     UDFResolver.resolveUdfConf(conf, isDriver = false)
-    initialize(conf)
+    initialize(conf, false)
   }
 
   override def onExecutorShutdown(): Unit = shutdown()
 
-  private def initialize(conf: SparkConf): Unit = {
+  private def initialize(conf: SparkConf, isDriver: Boolean): Unit = {
     // Force batch type initializations.
     VeloxBatch.getClass
     ArrowJavaBatch.getClass
@@ -158,7 +158,7 @@ class VeloxListenerApi extends ListenerApi with Logging {
 
     // Initial native backend with configurations.
     val parsed = GlutenConfigUtil.parseConfig(conf.getAll.toMap)
-    NativeBackendInitializer.initializeBackend(parsed)
+    NativeBackendInitializer.initializeBackend(parsed, isDriver)
 
     // Inject backend-specific implementations to override spark classes.
     GlutenFormatFactory.register(new VeloxParquetWriterInjects, new VeloxOrcWriterInjects)

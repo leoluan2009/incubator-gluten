@@ -195,7 +195,7 @@ void VeloxBackend::initJolFilesystem() {
 }
 
 void VeloxBackend::initCache() {
-  if (backendConf_->get<bool>(kVeloxCacheEnabled, false)) {
+  if (backendConf_->get<bool>(kVeloxCacheEnabled, false) && !isDriver_) {
     FLAGS_ssd_odirect = true;
 
     FLAGS_ssd_odirect = backendConf_->get<bool>(kVeloxSsdODirectEnabled, false);
@@ -308,8 +308,8 @@ void VeloxBackend::initUdf() {
 
 std::unique_ptr<VeloxBackend> VeloxBackend::instance_ = nullptr;
 
-void VeloxBackend::create(const std::unordered_map<std::string, std::string>& conf) {
-  instance_ = std::unique_ptr<VeloxBackend>(new VeloxBackend(conf));
+void VeloxBackend::create(const std::unordered_map<std::string, std::string>& conf, bool isDriver) {
+  instance_ = std::unique_ptr<VeloxBackend>(new VeloxBackend(conf, isDriver));
 }
 
 VeloxBackend* VeloxBackend::get() {

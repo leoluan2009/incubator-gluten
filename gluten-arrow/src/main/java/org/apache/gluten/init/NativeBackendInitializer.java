@@ -41,12 +41,13 @@ public final class NativeBackendInitializer {
   // In local mode, NativeBackendInitializer#initializeBackend will be invoked twice in same
   // thread, driver first then executor, initialized flag ensure only invoke initializeBackend once,
   // so there are no race condition here.
-  public static void initializeBackend(scala.collection.Map<String, String> conf) {
+  public static void initializeBackend(
+      scala.collection.Map<String, String> conf, boolean isDriver) {
     if (!initialized.compareAndSet(false, true)) {
       // Already called.
       return;
     }
-    initialize0(conf);
+    initialize0(conf, isDriver);
     SparkShutdownManagerUtil.addHook(
         () -> {
           shutdown();
@@ -54,18 +55,18 @@ public final class NativeBackendInitializer {
         });
   }
 
-  private static void initialize0(scala.collection.Map<String, String> conf) {
+  private static void initialize0(scala.collection.Map<String, String> conf, boolean isDriver) {
     try {
       Map<String, String> nativeConfMap =
           GlutenConfig.getNativeBackendConf(Backend.get().name(), conf);
-      initialize(ConfigUtil.serialize(nativeConfMap));
+      initialize(ConfigUtil.serialize(nativeConfMap), isDriver);
     } catch (Exception e) {
       LOG.error("Failed to call native backend's initialize method", e);
       throw e;
     }
   }
 
-  private static native void initialize(byte[] configPlan);
+  private static native void initialize(byte[] configPlan, boolean isDriver);
 
   private static native void shutdown();
 

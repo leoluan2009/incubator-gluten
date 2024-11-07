@@ -49,7 +49,7 @@ class VeloxBackend {
     }
   }
 
-  static void create(const std::unordered_map<std::string, std::string>& conf);
+  static void create(const std::unordered_map<std::string, std::string>& conf, bool isDriver);
 
   static VeloxBackend* get();
 
@@ -67,7 +67,7 @@ class VeloxBackend {
   }
 
  private:
-  explicit VeloxBackend(const std::unordered_map<std::string, std::string>& conf) {
+  explicit VeloxBackend(const std::unordered_map<std::string, std::string>& conf, bool isDriver) : isDriver_(isDriver) {
     init(conf);
   }
 
@@ -95,6 +95,8 @@ class VeloxBackend {
   std::string cacheFilePrefix_;
 
   std::shared_ptr<facebook::velox::config::ConfigBase> backendConf_;
+
+  bool isDriver_ = false;
 };
 
 } // namespace gluten

@@ -49,7 +49,7 @@ class MemoryManagerTest : public ::testing::Test {
     std::unordered_map<std::string, std::string> conf = {
         {kMemoryReservationBlockSize, std::to_string(kMemoryReservationBlockSizeDefault)},
         {kVeloxMemInitCapacity, std::to_string(kVeloxMemInitCapacityDefault)}};
-    gluten::VeloxBackend::create(conf);
+    gluten::VeloxBackend::create(conf, false);
   }
 
   void SetUp() override {
@@ -331,7 +331,7 @@ class MultiMemoryManagerTest : public ::testing::Test {
     std::unordered_map<std::string, std::string> conf = {
         {kMemoryReservationBlockSize, std::to_string(kMemoryReservationBlockSizeDefault)},
         {kVeloxMemInitCapacity, std::to_string(kVeloxMemInitCapacityDefault)}};
-    gluten::VeloxBackend::create(conf);
+    gluten::VeloxBackend::create(conf, false);
   }
 
   std::unique_ptr<VeloxMemoryManager> newVeloxMemoryManager(std::unique_ptr<AllocationListener> listener) {
